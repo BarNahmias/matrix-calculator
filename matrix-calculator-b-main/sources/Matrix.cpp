@@ -92,7 +92,7 @@ using namespace zich;
             if (!good_input_mul( a,b) ){
                 throw std::out_of_range("arithmetic  error ");}
 
-            zich::Matrix result{a._vec, a._row, a._column};
+            zich::Matrix result ;
             for(unsigned i =0 ; i< a._row;i++)
             {
                 for(unsigned j=0;j< a._column;j++)
