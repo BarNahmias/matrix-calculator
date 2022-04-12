@@ -31,6 +31,17 @@ namespace zich{
 
         Matrix();
 
+        Matrix(double row_a,double column_b){
+            this->_row=row_a;
+            this->_column=column_b;
+            std::vector<double > vect;
+            for (unsigned i = 0; i < column_b*row_a; i++) {
+                vect.at(i)=0;
+            }
+            this->_vec=vect;
+
+        }
+
         Matrix(std::vector<double> vec , double row,double column) {
             this->_row = row;
             this->_column = column;
@@ -43,11 +54,7 @@ namespace zich{
             }
         }
 
-//        Matrix(std::vector<double> vec , double row,double column) {
-//            this->_row = row;
-//            this->_column = column;
-//            this->_vec=vec;
-//        }
+
 
 
 
@@ -57,7 +64,7 @@ namespace zich{
             this->_row= object._row;
             this->_column= object._column;
             this->_vec= object._vec;
-//            this->_mat=object._mat;
+            this->_mat=object._mat;
         }
 
 //      **operators**
@@ -121,7 +128,7 @@ namespace zich{
         friend bool good_input_mul(const Matrix& a,const Matrix& b);
         friend bool good_input_add(const Matrix& a,const Matrix& b);
         friend bool good_input(const Matrix& a);
-
+        friend double sum_matrix(const Matrix& a);
     };
 }
 

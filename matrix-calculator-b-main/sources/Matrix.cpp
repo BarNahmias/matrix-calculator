@@ -50,7 +50,9 @@ using namespace zich;
 
             if (!good_input_add( a,b) ){
                 throw std::out_of_range("arithmetic  error ");}
+
             zich::Matrix result{a._vec, a._row, a._column};
+
             for(unsigned i =0 ; i< result._row;i++)
             {
                 for(unsigned j=0;j< result._column;j++)
@@ -70,7 +72,9 @@ using namespace zich;
 
              if (!good_input_add( a,b) ){
                  throw std::out_of_range("arithmetic  error ");}
+
              zich::Matrix result{a._vec, a._row, a._column};
+
              for(unsigned i =0 ; i< result._row;i++)
              {
                  for(unsigned j=0;j< result._column;j++)
@@ -92,7 +96,7 @@ using namespace zich;
             if (!good_input_mul( a,b) ){
                 throw std::out_of_range("arithmetic  error ");}
 
-            zich::Matrix result ;
+            zich::Matrix result{a._row,b._column} ;
             for(unsigned i =0 ; i< a._row;i++)
             {
                 for(unsigned j=0;j< a._column;j++)
@@ -179,8 +183,7 @@ using namespace zich;
             if (!good_input(m) ){
                 throw std::out_of_range("input  error ");}
 
-//        zich::Matrix result = *this;
-        zich:: Matrix result {m._vec, m._row, m._column};
+            zich:: Matrix result {m._vec, m._row, m._column};
         for(unsigned i =0 ; i< result._row;i++)
         {
             for(unsigned j=0;j< result._column;j++)
@@ -196,7 +199,6 @@ using namespace zich;
                 throw std::out_of_range("input  error ");}
 
             zich:: Matrix result {m._vec, m._row, m._column};
-//            zich::Matrix result = *this;
 
             for(unsigned i =0 ; i< result._row;i++)
             {
@@ -217,7 +219,7 @@ using namespace zich;
                 {
                     for(unsigned j=0;j< this->_column;j++)
                     {
-                        this->_mat[i][j]=(this->_mat[i][j]+1);
+                        this->_mat[i][j]=(this->_mat[i][j]++);
                     }
                 }
                 return *this;
@@ -232,7 +234,7 @@ using namespace zich;
                 {
                     for(unsigned j=0;j< this->_column;j++)
                     {
-                        this->_mat[i][j]=(this->_mat[i][j]-1);
+                        this->_mat[i][j]=(this->_mat[i][j]--);
                     }
                 }
                 return *this;
@@ -247,12 +249,13 @@ using namespace zich;
         if (!good_input(other) ){
             throw std::out_of_range("input  error ");}
              vector<double > r;
-             for(unsigned  i = 0; i<other._row*other._column;i++){
+             for(unsigned  i = 0; i<other._vec.size();i++){
                  r[i]=other._vec[i]+other._vec[i];
              }
             zich::Matrix result{r, other._row, other._column};
 
                 return result;
+
          }
 
 
@@ -261,7 +264,7 @@ using namespace zich;
             if (!good_input(other) ){
                 throw std::out_of_range("input  error ");}
             vector<double > r;
-            for(unsigned  i = 0; i<other._row*other._column;i++){
+            for(unsigned  i = 0; i<other._vec.size();i++){
                 r[i]=other._vec[i]-other._vec[i];
             }
             zich::Matrix result{r, other._row, other._column};
@@ -274,25 +277,27 @@ using namespace zich;
                 throw std::out_of_range("input  error ");}
 
             vector<double > r;
-            for(unsigned  i = 0; i<other._row*other._column;i++){
+            for(unsigned  i = 0; i<other._vec.size();i++){
                 r[i]=other._vec[i]*other._vec[i];
             }
             zich::Matrix result{r, other._row, other._column};
 
             return result;
+
             }
 
         Matrix  Matrix::operator*=( double scalar) {
             if (!good_input(*this) ){
                 throw std::out_of_range("input  error ");}
             vector<double > r;
-            for(unsigned  i = 0; i< this->_row* this->_column;i++){
+            for(unsigned  i = 0; i< this->_vec.size();i++){
                 r[i]=this->_vec[i]*scalar;
             }
             zich:: Matrix result{r, this->_row, this->_column};
 
             return result;
-            }
+
+        }
 
 
 //      Comparison
@@ -302,21 +307,9 @@ using namespace zich;
         if (!good_input(b) ){
             throw std::out_of_range("input  error ");}
 
+        double sum_a=sum_matrix(a);
+        double sum_b=sum_matrix(b);
 
-            double sum_a=0;
-            double sum_b=0;
-            for(unsigned i =0 ; i< a._row;i++)
-            {
-                for(unsigned j=0;j< a._column;j++) {
-                   sum_a=sum_a+ a._mat[i][j];
-                     }
-                }
-            for(unsigned i =0 ; i< b._row;i++)
-            {
-                for(unsigned j=0;j< b._column;j++) {
-                    sum_b=sum_b+ b._mat[i][j];
-                }
-            }
 
             return (sum_a<sum_b);
          }
@@ -327,21 +320,8 @@ using namespace zich;
             if (!good_input(b) ){
                 throw std::out_of_range("input  error ");}
 
-            double sum_a=0;
-            double sum_b=0;
-
-            for(unsigned i =0 ; i< a._row;i++)
-            {
-                for(unsigned j=0;j< a._column;j++) {
-                    sum_a=sum_a+ a._mat[i][j];
-                }
-            }
-            for(unsigned i =0 ; i< b._row;i++)
-            {
-                for(unsigned j=0;j< b._column;j++) {
-                    sum_b=sum_b+ b._mat[i][j];
-                }
-            }
+            double sum_a=sum_matrix(a);
+            double sum_b=sum_matrix(b);
 
             return (sum_a<=sum_b);
         }
@@ -352,21 +332,9 @@ using namespace zich;
                 throw std::out_of_range("input  error ");}
             if (!good_input(b) ){
                 throw std::out_of_range("input  error ");}
-            double sum_a=0;
-            double sum_b=0;
 
-            for(unsigned i =0 ; i< a._row;i++)
-            {
-                for(unsigned j=0;j< a._column;j++) {
-                    sum_a=sum_a+ a._mat[i][j];
-                }
-            }
-            for(unsigned i =0 ; i< b._row;i++)
-            {
-                for(unsigned j=0;j< b._column;j++) {
-                    sum_b=sum_b+ b._mat[i][j];
-                }
-            }
+            double sum_a=sum_matrix(a);
+            double sum_b=sum_matrix(b);
 
             return (sum_a>sum_b);
         }
@@ -377,22 +345,8 @@ using namespace zich;
             if (!good_input(b) ){
                 throw std::out_of_range("input  error ");}
 
-            double sum_a=0;
-            double sum_b=0;
-
-            for(unsigned i =0 ; i< a._row;i++)
-            {
-                for(unsigned j=0;j< a._column;j++) {
-                    sum_a=sum_a+ a._mat[i][j];
-                }
-            }
-            for(unsigned i =0 ; i< b._row;i++)
-            {
-                for(unsigned j=0;j< b._column;j++) {
-                    sum_b=sum_b+ b._mat[i][j];
-                }
-            }
-
+            double sum_a=sum_matrix(a);
+            double sum_b=sum_matrix(b);
             return (sum_a>=sum_b);
         }
 
@@ -403,21 +357,8 @@ using namespace zich;
             if (!good_input(b) ){
                 throw std::out_of_range("input  error ");}
 
-            double sum_a=0;
-            double sum_b=0;
-
-            for(unsigned i =0 ; i< a._row;i++)
-            {
-                for(unsigned j=0;j< a._column;j++) {
-                    sum_a=sum_a+ a._mat[i][j];
-                }
-            }
-            for(unsigned i =0 ; i< b._row;i++)
-            {
-                for(unsigned j=0;j< b._column;j++) {
-                    sum_b=sum_b+ b._mat[i][j];
-                }
-            }
+            double sum_a=sum_matrix(a);
+            double sum_b=sum_matrix(b);
 
             return (sum_a==sum_b);
         }
@@ -429,21 +370,8 @@ using namespace zich;
             if (!good_input(b) ){
                 throw std::out_of_range("input  error ");}
 
-            double sum_a=0;
-            double sum_b=0;
-
-            for(unsigned i =0 ; i< a._row;i++)
-            {
-                for(unsigned j=0;j< a._column;j++) {
-                    sum_a=sum_a+ a._mat[i][j];
-                }
-            }
-            for(unsigned i =0 ; i< b._row;i++)
-            {
-                for(unsigned j=0;j< b._column;j++) {
-                    sum_b=sum_b+ b._mat[i][j];
-                }
-            }
+            double sum_a=sum_matrix(a);
+            double sum_b=sum_matrix(b);
 
             return (sum_a!=sum_b);
         }
@@ -493,12 +421,12 @@ using namespace zich;
 
     if (!good_input(m) ){
         throw std::out_of_range("input  error ");}
-
-        for (int i = 0; i < m._row; i++)    {
-            for (int j = 0; j < m._column; j++){
-//                if ( ! (input >> m._mat[i][j]) ) return input;
-            }
-        }
+//
+//        for (int i = 0; i < m._row; i++)    {
+//            for (int j = 0; j < m._column; j++){
+////                if ( ! (input >> m._mat[i][j]) ) return input;
+//            }
+//        }
         return input; }
 
 //      output
@@ -508,18 +436,18 @@ using namespace zich;
         throw std::out_of_range("input  error ");}
 
              string result ;
-             for (unsigned i = 0; i < m._row; i++) {
-                 result +="[";
-                 for (unsigned j = 0; j <m._column ; j++) {
-                     result +=  to_string( m._mat[i][j]);
-                     result += " ";
-                 }
-                 result +="]";
-                 if(i!=m._row-1)
-                 {
-                 result +="\n";
-                 }
-                    }
+//             for (unsigned i = 0; i < m._row; i++) {
+//                 result +="[";
+//                 for (unsigned j = 0; j <m._column ; j++) {
+//                     result +=  to_string( m._mat[i][j]);
+//                     result += " ";
+//                 }
+//                 result +="]";
+//                 if(i!=m._row-1)
+//                 {
+//                 result +="\n";
+//                 }
+//                    }
 
              return output <<result;  }
 
@@ -534,5 +462,14 @@ using namespace zich;
                  }
 
         bool zich:: good_input(const Matrix& a){
-            return (a._row*a._column==a._vec.size());}
+            return ((a._row*a._column==a._vec.size())&&(a._row>0)&&(a._column>0));}
 
+        double zich:: sum_matrix(const Matrix& a){
+            double sum_a=0;
+            for(unsigned i =0 ; i< a._row;i++)
+            {
+                for(unsigned j=0;j< a._column;j++) {
+                    sum_a=sum_a+ a._mat[i][j];
+                }
+            }
+            return sum_a;}
