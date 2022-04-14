@@ -220,9 +220,10 @@ using namespace zich;
                 throw std::out_of_range("operator++ input  error ");}
 
             zich:: Matrix result {this->_vec, this->_row, this->_column};
-                   ++*this;
+                   ++(*this);
              return result;
         }
+
 
         Matrix Matrix::operator--(int dummy_flag_for_postfix_increment) {
             if (!good_input(*this)){
@@ -238,9 +239,12 @@ using namespace zich;
                 if (!good_input(*this)){
                     throw std::out_of_range("operator++ input  error ");}
 
-                vector<double > v(this->_vec.size(),1);
-                Matrix result(v, this->_row, this->_column);
-                *this+=result;
+                for (unsigned i = 0; i < this->_column * this->_row; i++) {
+                    this->_vec.at(i)++;
+                }
+//                vector<double > v(this->_vec.size(),1);
+//                Matrix result(v, this->_row, this->_column);
+//                *this+=result;
 
                 return *this;
 
@@ -465,9 +469,14 @@ using namespace zich;
                 throw std::out_of_range("operator== input  error ");}
             if (!good_input_add(a,b) ){
                 throw std::out_of_range("operator< input  error ");}
-            double sum_a=sum_matrix(a);
-            double sum_b=sum_matrix(b);
-            return (sum_a==sum_b);
+            for (unsigned i = 0; i <a._vec.size() ; ++i) {
+                if(a._vec.at(i)!=b._vec.at(i)){
+                    return false;
+                }
+
+            }
+
+            return true;
         }
 
         bool zich::operator!=(const Matrix &a,const Matrix &b) {
