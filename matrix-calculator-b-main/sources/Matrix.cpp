@@ -490,10 +490,11 @@ using namespace zich;
 
 
 //      input
-        std::istream& zich:: operator>>(std::istream& input,  Matrix &mat)  {
 
-    if (!good_input(mat) ){
-        throw std::out_of_range("input  error ");}
+    std::istream& zich:: operator>>(std::istream& input,  Matrix &mat)  {
+
+        if (!good_input(mat) ){
+            throw std::out_of_range("input  error ");}
         vector<double> vec;
         int row=0;
         int rowLenght = 1;
@@ -501,18 +502,18 @@ using namespace zich;
         double number = 0;
         bool first = false;
         string tempNum;
-        char temp = input.get();
-        while(temp!='\n'){
-            if(temp==' '){
+        char tp = input.get();
+        while(tp!='\n'){
+            if(tp==' '){
                 number= stod(tempNum);
                 vec.push_back(number);
                 tempNum="";
                 counter++;
             }
-            if(temp==','){
+            if(tp==','){
                 row++;
                 if(first&&rowLenght!=counter){
-                    throw invalid_argument("wrong input for matrix");
+                    throw invalid_argument("wrong input ");
                 }
                 if(!first) {
                     rowLenght = counter;
@@ -521,10 +522,10 @@ using namespace zich;
                 counter=0;
 
             }
-            if(temp!='['&&temp!=']') {
-                tempNum += temp;
+            if(tp!='['&&tp!=']') {
+                tempNum += tp;
             }
-            temp = input.get();
+            tp = input.get();
 
         }
         mat._column=rowLenght;
