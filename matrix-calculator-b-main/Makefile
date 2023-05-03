@@ -43,3 +43,6 @@ valgrind: test
 clean:
 	rm -f $(OBJECTS) *.o test* 
 	rm -f StudentTest*.cpp
+main : Main.o $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
